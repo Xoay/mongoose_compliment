@@ -7,6 +7,8 @@ function randomColor() {
 	return colors[Math.floor(Math.random()*colors.length)];
 }
 
+function randomCompliment(compliments)
+
 /* GET compliment form. */
 router.get('/compliment_form', function(req, res, next) {
 	var color = randomColor();
@@ -15,13 +17,26 @@ router.get('/compliment_form', function(req, res, next) {
 
 /* GET home page with queried name. */
 router.get('/(:name)?', function(req, res, next) {
-	name = req.params.name || "Friend";
+	var name = req.params.name || "Friend";
 	var color = randomColor();
+	var compliment = null;
+
+	compliment.find({}, '', function(err, results) {
+		if (err) console.log(err);
+
+		console.log(results);
+
+		var random = randomCompliment(results);
+
+		compliment = random.compliment;
+
+		res.render('index', { title: 'WDI Emergency Compliment', color: color, name: name, compliment: compliment });
+	});
 
 	// USE MONGOOSE TO GET A RANDOM COMPLIMENT FROM THE DATABASE, THEN RENDER THE VIEW
 
-	var compliment = null; // this line is just here to temporarily prevent an undefined error. You can remove it once you get a real compliment from the DB.
-	res.render('index', { title: 'WDI Emergency Compliment', color: color, name: name, compliment: compliment });
+	 // this line is just here to temporarily prevent an undefined error. You can remove it once you get a real compliment from the DB.
+
 });
 
 /* POST compliment. */
